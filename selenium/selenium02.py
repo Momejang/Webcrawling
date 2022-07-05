@@ -4,6 +4,12 @@ import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import selenium
+import os
+import psutil
+
+process = psutil.Process(os.getpid())
+print( process.memory_info).rss / 1024,' KB' )
+print( process.memory_info).rss / 1024 / 1024,' MB' )
 
 chomeDriverPath = "C:\Python\chromedriver\chromedriver.exe"
 options = webdriver.ChromeOptions()
@@ -63,3 +69,5 @@ print('-------------------------------------')
 print(*reviewData, sep = "\n")
 print('-------------------------------------')
 print('-------------------------------------')
+print( process.memory_info).rss / 1024,' KB' )
+print( process.memory_info).rss / 1024 / 1024,' MB' )
