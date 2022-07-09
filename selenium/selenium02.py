@@ -8,8 +8,8 @@ import os
 import psutil
 
 process = psutil.Process(os.getpid())
-print( process.memory_info).rss / 1024,' KB' )
-print( process.memory_info).rss / 1024 / 1024,' MB' )
+print(process.memory_info().rss / 1024, ' KB')
+print(process.memory_info().rss / 1024 / 1024, ' MB')
 
 chomeDriverPath = "C:\Python\chromedriver\chromedriver.exe"
 options = webdriver.ChromeOptions()
@@ -21,53 +21,57 @@ url = "https://www.oliveyoung.co.kr/store/goods/getGoodsDetail.do?goodsNo=A00000
 
 reviewData = []
 
-try :
-    print('selenium version :: ',selenium.__version__)
+try:
+    print('selenium version :: ', selenium.__version__)
     driver.get(url)
-    #time.sleep(3)
-    
-    driver.find_element(By.XPATH,'//*[@id="reviewInfo"]/a').click() # 댓글 클릭
+    # time.sleep(3)
+
+    driver.find_element(By.XPATH, '//*[@id="reviewInfo"]/a').click()  # 댓글 클릭
 
     # 10 페이지만 리뷰를 저장하자
-    for reviewPageNum in range(1,8) :
+    for reviewPageNum in range(1, 8):
         time.sleep(2)
-        reviewElement = driver.find_element(By.CLASS_NAME,'review_list_wrap') # 리뷰 DIV
+        reviewElement = driver.find_element(
+            By.CLASS_NAME, 'review_list_wrap')  # 리뷰 DIV
         time.sleep(2)
-        reviewLilist = reviewElement.find_elements(By.CSS_SELECTOR, '.inner_list>li') # 리뷰 li list elements
-        
+        reviewLilist = reviewElement.find_elements(
+            By.CSS_SELECTOR, '.inner_list>li')  # 리뷰 li list elements
+
         # sample = {'seq':0, 'id':'', 'content':'', 'date':''}
 
-        for index, item in enumerate(reviewLilist) :
+        for index, item in enumerate(reviewLilist):
             id = item.find_element(By.CSS_SELECTOR, '.id').text
             content = item.find_element(By.CSS_SELECTOR, '.txt_inner').text
             date = item.find_element(By.CSS_SELECTOR, '.date').text
-            
+
             item.get_attribute('class')
 
-            reviewNum = str(reviewPageNum-1) +'.'+ str(index+1) # 순번작성
+            reviewNum = str(reviewPageNum-1) + '.' + str(index+1)  # 순번작성
 
-            tempData = {'seq':reviewNum, 'id':id, 'content':'a', 'date':date}
+            tempData = {'seq': reviewNum, 'id': id,
+                        'content': 'a', 'date': date}
             reviewData.append(tempData)
-    
+
         print('======== '+str(reviewPageNum)+' ============')
         anchor = driver.find_element(By.CSS_SELECTOR, '.pageing>a')
         nextPage = reviewPageNum + 1
         time.sleep(2)
-        driver.execute_script("arguments[0].setAttribute('data-page-no',arguments[1])",anchor, nextPage) # 다음페이지 설정
+        driver.execute_script(
+            "arguments[0].setAttribute('data-page-no',arguments[1])", anchor, nextPage)  # 다음페이지 설정
         time.sleep(1)
-        anchor.click() # 다음 리뷰페이지로 이동
+        anchor.click()  # 다음 리뷰페이지로 이동
         time.sleep(2)
 
 except Exception as e:
     print('예외가 발생했습니다.', e)
 
-#time.sleep(3)
-driver.quit() # 종료
+# time.sleep(3)
+driver.quit()  # 종료
 
 print('-------------------------------------')
 print('-------------------------------------')
-print(*reviewData, sep = "\n")
+print(*reviewData, sep="\n")
 print('-------------------------------------')
 print('-------------------------------------')
-print( process.memory_info).rss / 1024,' KB' )
-print( process.memory_info).rss / 1024 / 1024,' MB' )
+print(process.memory_info().rss / 1024, ' KB')
+print(process.memory_info().rss / 1024 / 1024, ' MB')
